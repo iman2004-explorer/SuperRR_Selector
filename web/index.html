@@ -207,6 +207,20 @@
     <a href="#home" class="back-top">Back to top ↑</a>
     <div class="footer-bottom"><span>Research showcase · IPL + T20I historical data</span><span>Scores are model outputs, not guarantees.</span></div>
   </footer>
+  <dialog id="player-dialog" class="player-dialog" aria-labelledby="player-dialog-name">
+    <article class="player-dashboard">
+      <div class="player-dialog-topline">
+        <div>
+          <span id="player-dialog-role" class="role-pill"></span>
+          <span id="player-dialog-model" class="profile-model"></span>
+        </div>
+        <button id="player-dialog-close" class="dialog-close" type="button" aria-label="Close player dashboard">×</button>
+      </div>
+      <h2 id="player-dialog-name"></h2>
+      <p id="player-dialog-team" class="profile-team"></p>
+      <div id="player-dashboard-content"></div>
+    </article>
+  </dialog>
   <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
 </body>
 </html>
