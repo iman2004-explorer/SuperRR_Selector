@@ -27,7 +27,9 @@ const state = {
   pageSize: 25,
   allBatters: [],
   allBowlers: [],
-  s2ProfilesPromise: null
+  s2ProfilesPromise: null,
+  commonsPhotoCache: new Map(),
+  photoRequestId: 0
 };
 const numberFormat = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 
@@ -74,6 +76,138 @@ function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[char]);
+}
+
+function initialsOf(name) {
+  return String(name).trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
+}
+
+function plainMetadata(value) {
+  return new DOMParser().parseFromString(String(value ?? ""), "text/html").body.textContent.trim();
+}
+
+function photoWords(value) {
+  return String(value ?? "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().match(/[a-z0-9]+/g) || [];
+}
+
+function hasExactNamePhrase(text, name) {
+  const words = photoWords(text);
+  const nameWords = photoWords(name);
+  return nameWords.length > 1 && words.some((_, index) =>
+    words.slice(index, index + nameWords.length).join(" ") === nameWords.join(" ")
+  );
+}
+
+function hasCricketContext(text) {
+  return /\b(cricket|cricketer|bowling|bowler|batsman|batter|batting|wickets?|t20|ipl|odi|bgt|ashes|world cup|indian premier league|test match|border gavaskar)\b/i.test(text);
+}
+
+function isAllowedPhotoLicense(value) {
+  const license = String(value ?? "").toLowerCase().replace(/-/g, " ").replace(/\s+/g, " ").trim();
+  return /^(cc0|cc by(?: sa)?(?: [0-9.]+)?|public domain|pd)(?: |$)/.test(license);
+}
+
+function trustedUrl(value, hosts) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && hosts.includes(url.hostname) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+async function findCommonsPhoto(name) {
+  if (state.commonsPhotoCache.has(name)) return state.commonsPhotoCache.get(name);
+  const lookup = (async () => {
+    const params = new URLSearchParams({
+      action: "query",
+      generator: "search",
+      gsrsearch: `"${name}"`,
+      gsrnamespace: "6",
+      gsrlimit: "10",
+      prop: "imageinfo",
+      iiprop: "url|extmetadata|mime",
+      iiurlwidth: "360",
+      format: "json",
+      origin: "*"
+    });
+    const response = await fetch(`https://commons.wikimedia.org/w/api.php?${params}`);
+    if (!response.ok) throw new Error(`Wikimedia Commons returned ${response.status}.`);
+    const data = await response.json();
+    const pages = Object.values(data.query?.pages || {}).sort((left, right) => num(left.index) - num(right.index));
+    for (const page of pages) {
+      const info = page.imageinfo?.[0];
+      const metadata = info?.extmetadata || {};
+      const description = plainMetadata(metadata.ImageDescription?.value);
+      const categories = plainMetadata(metadata.Categories?.value);
+      const title = String(page.title || "").replace(/^File:/i, "");
+      const identityFields = [title, description, ...categories.split("|")];
+      const contextText = identityFields.join(" ");
+      const license = plainMetadata(metadata.LicenseShortName?.value);
+      const imageUrl = trustedUrl(info?.thumburl || info?.url, ["upload.wikimedia.org", "thumb.wikimedia.org"]);
+      const sourceUrl = trustedUrl(info?.descriptionurl, ["commons.wikimedia.org"]);
+      const mime = String(info?.mime || "").toLowerCase();
+      if (!identityFields.some((field) => hasExactNamePhrase(field, name)) || !hasCricketContext(contextText) || !isAllowedPhotoLicense(license)) continue;
+      if (!imageUrl || !sourceUrl || !["image/jpeg", "image/png", "image/webp"].includes(mime)) continue;
+      return {
+        imageUrl,
+        sourceUrl,
+        creator: plainMetadata(metadata.Artist?.value) || "Creator not listed",
+        license,
+        licenseUrl: trustedUrl(metadata.LicenseUrl?.value, ["creativecommons.org"])
+      };
+    }
+    return null;
+  })();
+  state.commonsPhotoCache.set(name, lookup);
+  try {
+    return await lookup;
+  } catch (error) {
+    state.commonsPhotoCache.delete(name);
+    throw error;
+  }
+}
+
+async function updatePlayerPhoto(name) {
+  const requestId = ++state.photoRequestId;
+  const image = document.getElementById("player-dialog-photo");
+  const initials = document.getElementById("player-photo-initials");
+  const credit = document.getElementById("player-photo-credit");
+  image.hidden = true;
+  image.removeAttribute("src");
+  image.alt = "";
+  initials.hidden = false;
+  initials.textContent = initialsOf(name);
+  credit.textContent = "Searching Wikimedia Commons for a reusable photo…";
+  let photo;
+  try {
+    photo = await findCommonsPhoto(name);
+  } catch (error) {
+    if (requestId === state.photoRequestId) credit.textContent = `Wikimedia Commons lookup failed: ${error.message} Initials shown instead.`;
+    return;
+  }
+  if (requestId !== state.photoRequestId) return;
+  if (!photo) {
+    credit.textContent = "No matching freely licensed Commons photo found; initials shown.";
+    return;
+  }
+  image.alt = `Photo of ${name}`;
+  image.onload = () => {
+    if (requestId === state.photoRequestId) initials.hidden = true;
+  };
+  image.onerror = () => {
+    if (requestId !== state.photoRequestId) return;
+    image.hidden = true;
+    initials.hidden = false;
+    credit.textContent = "Commons thumbnail unavailable; initials shown instead.";
+  };
+  image.hidden = false;
+  initials.hidden = false;
+  image.src = photo.imageUrl;
+  const license = photo.licenseUrl
+    ? `<a href="${escapeHtml(photo.licenseUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(photo.license)}</a>`
+    : escapeHtml(photo.license);
+  credit.innerHTML = `${escapeHtml(photo.creator)} · ${license} · Resized for display · <a href="${escapeHtml(photo.sourceUrl)}" target="_blank" rel="noopener noreferrer">Wikimedia Commons source</a>`;
 }
 
 function playerName(player) {
@@ -466,6 +600,7 @@ async function openPlayerDashboard(role, playerId, model) {
   if (s2Profile) content += renderS2Snapshot(s2Profile, role);
   document.getElementById("player-dashboard-content").innerHTML = content;
   dialog.showModal();
+  updatePlayerPhoto(playerName(source));
 }
 
 function showError(error) {

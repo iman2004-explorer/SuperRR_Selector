@@ -209,15 +209,24 @@
   </footer>
   <dialog id="player-dialog" class="player-dialog" aria-labelledby="player-dialog-name">
     <article class="player-dashboard">
-      <div class="player-dialog-topline">
-        <div>
-          <span id="player-dialog-role" class="role-pill"></span>
-          <span id="player-dialog-model" class="profile-model"></span>
+      <div class="player-profile">
+        <div class="player-photo">
+          <img id="player-dialog-photo" alt="" loading="lazy" hidden>
+          <span id="player-photo-initials" aria-hidden="true"></span>
         </div>
-        <button id="player-dialog-close" class="dialog-close" type="button" aria-label="Close player dashboard">×</button>
+        <div class="player-profile-copy">
+          <div class="player-dialog-topline">
+            <div>
+              <span id="player-dialog-role" class="role-pill"></span>
+              <span id="player-dialog-model" class="profile-model"></span>
+            </div>
+            <button id="player-dialog-close" class="dialog-close" type="button" aria-label="Close player dashboard">×</button>
+          </div>
+          <h2 id="player-dialog-name"></h2>
+          <p id="player-dialog-team" class="profile-team"></p>
+          <p id="player-photo-credit" class="player-photo-credit" aria-live="polite"></p>
+        </div>
       </div>
-      <h2 id="player-dialog-name"></h2>
-      <p id="player-dialog-team" class="profile-team"></p>
       <div id="player-dashboard-content"></div>
     </article>
   </dialog>
