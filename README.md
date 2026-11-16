@@ -37,3 +37,9 @@ Raw input CSVs and the supplied problem-statement PDF are excluded from version 
 - Scores use role-specific percentiles and shrink small-sample results toward a neutral score of 50. Profiles with no pressure sample receive a neutral score and are marked ineligible.
 
 This is a research decision-support tool, not a prediction or player recommendation. See the methodology document for definitions and limitations.
+
+## Host the showcase with Vercel
+
+The static website is configured to deploy from `web/` using the repository-root `vercel.json`. Import this GitHub repository into a Vercel project and leave the project root set to `.`. No build command or paid add-on is needed.
+
+Vercel's Hobby plan is free for personal, non-commercial use. It has usage limits; exceeding a limit can pause a feature until its limit resets. Do not upgrade or enable paid usage if you want to remain on the free plan.

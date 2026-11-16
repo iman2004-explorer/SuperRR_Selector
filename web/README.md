@@ -16,11 +16,12 @@ Open <http://localhost:8000>.
 
 Do not open `index.html` directly as a `file://` URL: browsers block the CSV `fetch()` requests in that mode.
 
-## Publish as a public URL with GitHub Pages
+## Deploy with Vercel
 
-1. Push this project to a GitHub repository, including `web/` and `.github/workflows/publish-showcase.yml`.
-2. In the repository, open **Settings → Pages** and set the source to **GitHub Actions**.
-3. Push to `main` or `master`, or manually run **Publish SupeRR Selector showcase** under the **Actions** tab.
-4. When the deployment completes, open **Settings → Pages** or the workflow run to copy the public URL for your presentation.
+The repository includes a root-level `vercel.json` that publishes this directory as a static site.
 
-The site is static and needs no server-side secrets. Anyone with the URL can view the page and download the bundled ranking CSVs. Publish only data and project material intended for public access.
+1. Sign in to Vercel with GitHub and import `iman2004-explorer/SuperRR_Selector`.
+2. Keep the project root at `.` so Vercel can read the root `vercel.json`.
+3. Deploy with the Hobby plan; no build command or paid add-on is needed.
+
+Vercel's Hobby plan is free for personal, non-commercial use. It has usage limits; exceeding a limit can pause a feature until the limit resets. Do not upgrade or enable paid usage if you want to remain on the free plan. Anyone with the deployment URL can view the page and download the bundled ranking CSVs. Publish only data and project material intended for public access.
