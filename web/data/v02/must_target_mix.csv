@@ -1,0 +1,11 @@
+mix_rank,role,role_rank,player_id,player_name,PRI,pressure_sample,sample_unit,pressure_matches,pressure_metric,pressure_value,baseline_value
+1,Batter,1,2756,Shashank Singh,84.27599165277272,379.0,balls faced,30.0,strike rate,180.47493403693932,122.09944751381215
+2,Bowler,1,5979,Abrar Ahmed,88.89223052597725,381.0,legal balls bowled,25.0,economy,6.015748031496063,7.347258485639687
+3,Batter,2,143,Dinesh Karthik,81.64361681910431,364.0,balls faced,35.0,strike rate,184.06593406593407,145.0909090909091
+4,Bowler,2,2490,Mohammad Nawaz,84.87187427945457,515.0,legal balls bowled,39.0,economy,7.060194174757282,7.190184049079755
+5,Batter,3,768,Reeza Hendricks,80.9345335409006,394.0,balls faced,16.0,strike rate,168.78172588832487,126.75736961451247
+6,Bowler,3,4237,Tabraiz Shamsi,84.42235974129679,162.0,legal balls bowled,11.0,economy,8.407407407407407,10.864864864864865
+7,Batter,4,8101,Ashutosh Sharma,79.13183727418178,271.0,balls faced,24.0,strike rate,175.27675276752768,141.26984126984127
+8,Bowler,4,2382,Jamie Overton,84.00708192896305,277.0,legal balls bowled,22.0,economy,8.252707581227437,9.149321266968325
+9,Batter,5,2334,Dwaine Pretorius,78.27521178080534,77.0,balls faced,10.0,strike rate,170.12987012987014,80.0
+10,Bowler,5,8805,Ottneil Baartman,81.93443813106016,168.0,legal balls bowled,11.0,economy,8.428571428571429,10.103225806451613

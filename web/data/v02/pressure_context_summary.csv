@@ -1,0 +1,5 @@
+role,situation,sample_balls,primary_metric,primary_value,secondary_metric,secondary_value,tertiary_metric,tertiary_value
+Batter,Pressure,71757,Strike rate,142.66203994035425,Dot-ball rate,36.863302534944324,Dismissal rate,6.609808102345416
+Batter,Normal,114759,Strike rate,138.30026403157922,Dot-ball rate,37.05765996566718,Dismissal rate,4.739497555747262
+Bowler,Pressure,99882,Economy,9.250255301255482,Wickets per 6 balls,0.3717186279810176,Dot-ball rate,34.13527962996336
+Bowler,Normal,86069,Economy,8.148299620072267,Wickets per 6 balls,0.25869941558517,Dot-ball rate,40.10735572621966

@@ -1,0 +1,11 @@
+role_rank,role,player_id,player_name,team,PRI,pressure_sample,sample_unit,pressure_matches,pressure_metric,pressure_value,baseline_value,mix_rank
+1,Batter,1699,Suryakumar Yadav,Mumbai Indians,73.54,1341.0,balls faced,55.0,net value/100,38.29,0,1
+1,Bowler,2382,Jamie Overton,Chennai Super Kings,76.94,357.0,legal balls bowled,16.0,net value/100,35.41,0,2
+2,Batter,2533,Najibullah Zadran,Afghanistan,70.58,239.0,balls faced,12.0,net value/100,27.16,0,3
+2,Bowler,781,Sunil Narine,Kolkata Knight Riders,74.13,1080.0,legal balls bowled,47.0,net value/100,32.08,0,4
+3,Batter,2485,Babar Azam,Pakistan,70.12,284.0,balls faced,13.0,net value/100,30.7,0,5
+3,Bowler,4900,Wanindu Hasaranga,Lucknow Super Giants,72.17,1400.0,legal balls bowled,53.0,net value/100,33.87,0,6
+4,Batter,4260,Heinrich Klaasen,Sunrisers Hyderabad,68.26,1152.0,balls faced,48.0,net value/100,30.07,0,7
+4,Bowler,829,Mitchell Starc,Delhi Capitals,70.92,333.0,legal balls bowled,27.0,net value/100,28.81,0,8
+5,Batter,6396,Tim David,Royal Challengers Bengaluru,68.14,1268.0,balls faced,59.0,net value/100,33.1,0,9
+5,Bowler,25048,Umran Malik,Kolkata Knight Riders,69.05,463.0,legal balls bowled,19.0,net value/100,27.66,0,10

@@ -1,0 +1,11 @@
+metric,value,unit
+raw_deliveries,200999,deliveries
+selected_deliveries,194014,deliveries
+selected_matches,837,matches
+selected_competitions,136,competitions
+batter_players_scored,824,players
+bowler_players_scored,596,players
+eligible_batters,276,players
+eligible_bowlers,271,players
+batter_pressure_deliveries,75008,deliveries
+bowler_pressure_deliveries,104884,deliveries
