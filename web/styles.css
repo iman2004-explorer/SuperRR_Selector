@@ -164,6 +164,21 @@ h2 { font: 700 clamp(30px, 4vw, 43px)/1.15 var(--display); letter-spacing: -.055
 .eligibility-track span { display: block; height: 100%; background: var(--royal-pink); }
 .profile-footnote { margin: 12px 0 0; color: #aaa9c3; font-size: 9px; line-height: 1.7; }
 .profile-auction-note { padding: 12px; border: 1px solid rgba(237,22,136,.3); background: #1a1b3d; color: #f0cade; }
+.profile-chart-block { margin-top: 16px; }
+.profile-chart-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.profile-chart-heading h4 { margin: 0; font: 600 13px var(--display); }
+.profile-chart-heading span { color: #9392b1; font-size: 8px; }
+.profile-chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.profile-chart-card { min-width: 0; padding: 13px; border: 1px solid var(--line); background: #181936; }
+.profile-chart-card h4 { margin: 0 0 11px; color: #d8d6e5; font: 600 10px var(--display); }
+.profile-chart-card p { margin: 0; color: #aaa9c3; font-size: 9px; }
+.profile-chart-line { display: grid; grid-template-columns: 58px minmax(30px, 1fr) max-content; align-items: center; gap: 8px; margin-top: 8px; }
+.profile-chart-line > span { color: #aaa9c3; font-size: 8px; }
+.profile-chart-line b { color: #dedbeb; font: 8px var(--mono); text-align: right; }
+.profile-chart-track { height: 7px; overflow: hidden; background: #30315b; }
+.profile-chart-track i { display: block; height: 100%; }
+.profile-chart-pressure { background: var(--royal-pink); }
+.profile-chart-baseline { background: #7778a8; }
 .profile-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
 .profile-metric { min-width: 0; padding: 14px; border: 1px solid var(--line); background: #181936; }
 .profile-metric > span { display: block; color: #aaa9c3; font: 8px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
@@ -325,6 +340,9 @@ tbody tr:hover { background: rgba(237,22,136,.055); }
   .profile-status { align-items: start; flex-direction: column; }
   .profile-status span { text-align: left; }
   .profile-heading-badges { align-items: end; flex-direction: column; }
+  .profile-chart-grid { grid-template-columns: 1fr; }
+  .profile-chart-heading { align-items: start; flex-direction: column; }
+  .profile-chart-line { grid-template-columns: 56px minmax(20px, 1fr) max-content; gap: 6px; }
   .profile-model { display: block; margin: 8px 0 0; }
   .leader-card { min-height: 260px; }
   .leader-score { margin-top: 20px; }

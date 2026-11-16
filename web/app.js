@@ -269,6 +269,43 @@ function profileKpi(label, value, note) {
   return `<article class="profile-kpi"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></article>`;
 }
 
+function renderProfileCharts(player, role) {
+  const metrics = role === "bat"
+    ? [
+      { label: "Strike rate", pressure: player.pressure_sr, baseline: player.baseline_sr, unit: "SR", digits: 1 },
+      { label: "Dot-ball rate", pressure: player.pressure_dot_pct, baseline: player.baseline_dot_pct, unit: "%", digits: 1 },
+      { label: "Dismissal rate", pressure: player.pressure_dismissal_rate, baseline: player.baseline_dismissal_rate, unit: "outs / 100 balls", digits: 2 }
+    ]
+    : [
+      { label: "Economy", pressure: player.pressure_economy, baseline: player.baseline_economy, unit: "runs / 6 balls", digits: 2 },
+      { label: "Wicket rate", pressure: player.pressure_wicket_rate, baseline: player.baseline_wicket_rate, unit: "wickets / 6 balls", digits: 2 },
+      { label: "Dot-ball rate", pressure: player.pressure_dot_pct, baseline: player.baseline_dot_pct, unit: "%", digits: 1 },
+      { label: "Boundary rate", pressure: player.pressure_boundary_pct, baseline: player.baseline_boundary_pct, unit: "%", digits: 1 }
+    ];
+  const cards = metrics.map((metric) => {
+    const valuesAvailable = [metric.pressure, metric.baseline].every((value) =>
+      value !== null && value !== undefined && String(value).trim() !== "" && Number.isFinite(Number(value))
+    );
+    if (!valuesAvailable) {
+      return `<article class="profile-chart-card"><h4>${escapeHtml(metric.label)}</h4><p>Pressure comparison unavailable for this profile.</p></article>`;
+    }
+    const pressure = Number(metric.pressure);
+    const baseline = Number(metric.baseline);
+    const max = Math.max(Math.abs(pressure), Math.abs(baseline), .0001);
+    const barWidth = (value) => `${Math.min(Math.abs(value) / max * 100, 100)}%`;
+    const format = (value) => `${profileNumber(value, metric.digits)}${metric.unit ? ` ${escapeHtml(metric.unit)}` : ""}`;
+    return `<article class="profile-chart-card">
+      <h4>${escapeHtml(metric.label)}</h4>
+      <div class="profile-chart-line"><span>Pressure</span><div class="profile-chart-track" aria-hidden="true"><i class="profile-chart-pressure" style="width:${barWidth(pressure)}"></i></div><b>${format(pressure)}</b></div>
+      <div class="profile-chart-line"><span>Baseline</span><div class="profile-chart-track" aria-hidden="true"><i class="profile-chart-baseline" style="width:${barWidth(baseline)}"></i></div><b>${format(baseline)}</b></div>
+    </article>`;
+  }).join("");
+  return `<div class="profile-chart-block">
+    <div class="profile-chart-heading"><h4>Visual comparison</h4><span>Each metric has its own scale</span></div>
+    <div class="profile-chart-grid">${cards}</div>
+  </div>`;
+}
+
 function eligibilityCriterion(label, value, threshold, unit) {
   const count = num(value);
   const met = count >= threshold;
@@ -324,6 +361,7 @@ function renderV02Metrics(player, role) {
       ${profileKpi("Pressure output", pressureOutput, `Baseline sample: ${profileNumber(baselineCount, 0)} balls`)}
       ${profileKpi("Baseline output", baselineOutput, `${profileNumber(player.baseline_matches, 0)} baseline matches`)}
     </div>
+    ${renderProfileCharts(player, role)}
     <div class="profile-metrics">${metrics.join("")}</div>
   </section>`;
 }
